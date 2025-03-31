@@ -1,0 +1,11 @@
+discord.py
+discord.py[audio]
+audioop-lts; python_version >= "3.13"
+colorlog
+pynacl
+python-dotenv
+google-generativeai
+firebase-admin
+yt-dlp
+Pillow
+requests
