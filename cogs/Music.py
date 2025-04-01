@@ -45,12 +45,10 @@ class Music(commands.Cog):
         if self._queue:
             if len(self.cursong) > 0:
                 self.cursong[server_id] = self._queue[server_id].pop(0)
-            else:
-                return
             
             vc_client.play(
                 discord.FFmpegOpusAudio(self.cursong[server_id]["url"], **self._FFMPEG_OPTS),
-                after = lambda e: self.play_song(server_id, vc_client)
+                after = lambda _: self.play_song(server_id, vc_client)
             )
         else:
             self.cursong[server_id] = {}
@@ -80,11 +78,12 @@ class Music(commands.Cog):
                 }
             
             self._queue[ctx.guild.id].append(song)
+            
             if not vc_client.is_playing():
                 self.play_song(ctx.guild.id, vc_client)
                 song_embed = discord.Embed(
                     color = 0x00FF00,
-                    title = f"Playing {song["name"]}"
+                    title = f"Playing {song['name']}"
                 )
                 print(song["thumb"])
                 thumbnail = song["thumb"][-2] if len(song["thumb"]) >= 2 else song["thumb"][0]
@@ -92,7 +91,7 @@ class Music(commands.Cog):
                 
                 await ctx.reply(embed = song_embed)
             else:
-                await ctx.reply(f"Added to queue {song["name"]}")
+                await ctx.reply(f"Added to queue {song['name']}")
     
     @commands.hybrid_command()
     async def queue(self, ctx: commands.Context, *, cmd):
@@ -115,11 +114,11 @@ class Music(commands.Cog):
             if len(self._queue[ctx.guild.id]) > 0:
                 songs = ""
                 for i in range(len(self._queue[ctx.guild.id])):
-                    songs += f"{self._queue[ctx.guild.id][i]["name"]}\n"
+                    songs += f"{self._queue[ctx.guild.id][i]['name']}\n"
 
-                await ctx.reply(f"(PLAYING) {self.cursong[ctx.guild.id]["name"]}\n{songs}")
+                await ctx.reply(f"(PLAYING) {self.cursong[ctx.guild.id]['name']}\n{songs}")
             elif ctx.guild.id in self.cursong:
-                await ctx.reply(f"(PLAYING) {self.cursong[ctx.guild.id]["name"]}")
+                await ctx.reply(f"(PLAYING) {self.cursong[ctx.guild.id]['name']}")
             else:
                 await ctx.reply("There are no songs in the queue.")
     

@@ -36,7 +36,7 @@ async def on_ready():
             log.error(e)
     
     await client.tree.sync()
-    await client.change_presence(activity = discord.Game(f"{config["status"]} || {config["default_prefix"]}help"))
+    await client.change_presence(activity = discord.Game(f"{config['status']} || {config['default_prefix']}help"))
     log.info("Beep boop... Bot is ready")
 
 client.run(os.environ["TOKEN"])
